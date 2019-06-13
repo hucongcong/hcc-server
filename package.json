@@ -31,6 +31,7 @@
     "pre-commit": "^1.2.2"
   },
   "dependencies": {
+    "art-template": "^4.13.2",
     "chalk": "^2.4.2",
     "mime": "^2.4.4"
   }
