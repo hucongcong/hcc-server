@@ -1,8 +1,21 @@
-# node_learn
-nodejs入门到企业开发的应用
+# hcc-server
 
-## 01-demo
-node中的一些演示代码
+可以在任意目录启动一个静态资源服务器，并且自动打开浏览器
 
-## 02-anydoor
-实现一个静态的服务器命令，可以在任意目录中使用，就可以在当前目录中启动服务器。 只是一个小demo，完整的功能请下载`anywhere`
+## 安装
+
+```bash
+npm i hcc-server -g
+```
+
+使用yarn
+```bash
+yarn global add hcc-server
+```
+
+## 用法
+
+```bash
+hcc-server # 把当前目录作为静态资源目录,启动服务器
+hcc-server -p 8080 # -p或者 --port 指定启动的端口，默认8080
+```

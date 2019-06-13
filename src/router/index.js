@@ -6,24 +6,35 @@ const readdir = promisify(fs.readdir)
 const mime = require('mime')
 const template = require('art-template')
 
-const { root } = require('../config')
+const compress = require('../utils/compress')
+const isRefresh = require('../utils/cache')
+
 // 处理路由
-async function router(req, res) {
+async function router(req, res, config) {
+  const { root, compress: compressReg } = config
   const filePath = path.join(root, req.url)
-  console.log(filePath)
+  // console.log(filePath)
   // 读取文件状态，判断是文件还是文件夹
   try {
     const stats = await stat(filePath)
     if (stats.isFile()) {
       // 如果是文件
       // 设置响应头
+      if (isRefresh(stats, req, res)) {
+        res.statusCode = 304
+        res.end()
+        return
+      }
       let contentType = mime.getType(req.url)
       if (/\.(json|js|css|html|md)/.test(req.url)) {
         contentType += ';charset=utf-8'
       }
       res.setHeader('content-type', contentType)
       // 以流的形式返回给客户端
-      fs.createReadStream(filePath).pipe(res)
+      const rs = fs.createReadStream(filePath)
+      if (filePath.match(compressReg)) {
+        compress(rs, req, res).pipe(res)
+      }
     } else if (stats.isDirectory()) {
       // 如果是文件夹
       let files = await readdir(filePath)
@@ -38,14 +49,14 @@ async function router(req, res) {
         title: path.basename(filePath),
         files
       }
-      console.log(root, filePath, data.dir)
+      // console.log(root, filePath, data.dir)
       const html = template(tmlPath, data)
       res.setHeader('content-type', 'text/html')
       res.end(html)
     }
   } catch (e) {
     // 处理404
-    console.log(e)
+    // console.log(e)
     render404(res)
   }
 }

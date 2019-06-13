@@ -1,8 +1,11 @@
 {
-  "name": "node_learn",
+  "name": "hcc-server",
   "version": "1.0.0",
-  "description": "nodejs入门到企业开发的应用",
-  "main": "index.js",
+  "description": "静态服务器，自动打开浏览器",
+  "main": "src/app.js",
+  "bin": {
+    "hcc-server": "bin/hcc-server"
+  },
   "scripts": {
     "lint": "eslint .",
     "fix": "eslint --fix ."
@@ -33,6 +36,7 @@
   "dependencies": {
     "art-template": "^4.13.2",
     "chalk": "^2.4.2",
-    "mime": "^2.4.4"
+    "mime": "^2.4.4",
+    "yargs": "^13.2.4"
   }
 }
